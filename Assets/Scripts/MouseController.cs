@@ -1,18 +1,78 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MouseController : MonoBehaviour 
+public class MouseController : MonoBehaviour
 {
 	private GameObject hoveredMover = null;
 
 	// Use this for initialization
-	void Start () 
+	void Start()
 	{
-	
+
 	}
-	
+
 	// Update is called once per frame
-	void Update () 
+	void Update()
+	{
+		if(Input.GetMouseButtonDown(0))
+		{
+			HandleMouseClick();
+		}
+		else
+		{
+			HandleMouseHover();
+		}
+	}
+
+	private void HandleMouseHover()
+	{
+		RaycastHit[] hits;
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+		// First I need to check for the mouse hovering over any objects in "Mouse Over Active"
+		//	layer.
+		hits = Physics.RaycastAll(ray, Mathf.Infinity, LayerMask.NameToLayer("Mouse Over Active"));
+
+		bool found = false;
+		// If an object is found, select it and set hoveredMover
+		if(hits.Length != 0)
+		{
+			print(hits.Length);
+			for(int i = 0; i < hits.Length; ++i)
+			{
+				if(hits[i].transform.tag == "Mover")
+				{
+					
+					hoveredMover = hits[i].transform.gameObject;
+					hoveredMover.GetComponent<Mover>().MouseEnter();
+					found = true;
+					break;
+				}
+			}
+		}
+
+		if(found)
+		{
+			// We're done with this function, return
+			return;
+		}
+
+		// Now check for objects on the "Mouse Over Inactive" layer
+		hits = Physics.RaycastAll(ray, Mathf.Infinity, LayerMask.NameToLayer("Mouse Over Inactive"));
+
+		if(hoveredMover != null && hits.Length > 0)
+		{
+			hoveredMover.GetComponent<Mover>().MouseExit();
+			hoveredMover = null;
+		}
+	}
+
+	private void HandleMouseClick()
+	{
+		
+	}
+
+	private void MouseLogicOld()
 	{
 		// Use raycast because OnMouseDown works differently when a rigidbody is attached to the piece
 		RaycastHit[] hit;
