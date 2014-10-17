@@ -1,3 +1,24 @@
+#################
+## UNITY
+#################
+*.sln
+*.userprefs
+*.csproj
+*.pidb
+*.unityproj
+.DS_Store
+/Library/FailedAssetImports.txt
+/Library/cache/
+/Library/previews/
+/Library/ScriptAssemblies
+/obj
+/Temp
+
+#################
+## Sublime Text
+#################
+*.sublime-workspace
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
