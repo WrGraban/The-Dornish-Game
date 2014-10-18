@@ -31,7 +31,7 @@ public class MouseController : MonoBehaviour
 
 		// First I need to check for the mouse hovering over any objects in "Mouse Over Active"
 		//	layer.
-		hits = Physics.RaycastAll(ray, Mathf.Infinity, LayerMask.NameToLayer("Mouse Over Active"));
+		hits = Physics.RaycastAll(ray, Mathf.Infinity, ~LayerMask.NameToLayer("Mouse Over Active"));
 
 		bool found = false;
 		// If an object is found, select it and set hoveredMover
@@ -42,7 +42,9 @@ public class MouseController : MonoBehaviour
 			{
 				if(hits[i].transform.tag == "Mover")
 				{
-					
+					if (hoveredMover != null)
+						hoveredMover.GetComponent<Mover>().MouseExit();
+
 					hoveredMover = hits[i].transform.gameObject;
 					hoveredMover.GetComponent<Mover>().MouseEnter();
 					found = true;
@@ -58,7 +60,7 @@ public class MouseController : MonoBehaviour
 		}
 
 		// Now check for objects on the "Mouse Over Inactive" layer
-		hits = Physics.RaycastAll(ray, Mathf.Infinity, LayerMask.NameToLayer("Mouse Over Inactive"));
+		hits = Physics.RaycastAll(ray, Mathf.Infinity, ~LayerMask.NameToLayer("Mouse Over Inactive"));
 
 		if(hoveredMover != null && hits.Length > 0)
 		{
